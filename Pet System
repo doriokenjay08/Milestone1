@@ -1,0 +1,72 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class PetSystem {
+
+    static Connection conn;
+    static int currentUserId = -1;
+
+    public static void main(String[] args) {
+        try {
+            conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/pet_system",
+                "root",
+                ""
+            );
+
+            Scanner sc = new Scanner(System.in);
+
+            while (true) {
+                System.out.println("\n=== PET SYSTEM ===");
+                System.out.println("1. Register Account");
+                System.out.println("2. Login");
+                System.out.println("3. Register Pet");
+                System.out.println("4. Monitor Session");
+                System.out.println("5. Log Incident");
+                System.out.println("6. View My Pets");
+                System.out.println("7. View My Sessions");
+                System.out.println("8. Logout");
+                System.out.println("9. Exit");
+                System.out.print("Choice: ");
+                int choice = sc.nextInt();
+                sc.nextLine();
+
+                switch (choice) {
+                    case 1: 
+                        RegisterAccount.register(conn, sc); 
+                        break;
+                    case 2: 
+                        currentUserId = Login.login(conn, sc); 
+                        break;
+                    case 3: 
+                        if(currentUserId != -1)
+                            RegisterPet.register(conn, sc, currentUserId); 
+                        else 
+                            System.out.println("Please login first!");
+                        break;
+                    case 4: 
+                        if(currentUserId != -1)
+                            MonitorSession.record(conn, sc); 
+                        else 
+                            System.out.println("Please login first!");
+                        break;
+                    case 5: 
+                        if(currentUserId != -1)
+                            LogIncident.record(conn, sc); 
+                        else 
+                            System.out.println("Please login first!");
+                        break;
+                    case 8: 
+                        currentUserId = -1;
+                        System.out.println("Logged out successfully!");
+                        break;
+                    case 9: 
+                        System.exit(0);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
