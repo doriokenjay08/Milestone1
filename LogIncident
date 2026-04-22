@@ -1,0 +1,25 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class LogIncident {
+    public static void record(Connection conn, Scanner sc) throws SQLException {
+        System.out.print("Pet ID: ");
+        int petId = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Description: ");
+        String desc = sc.nextLine();
+
+        System.out.print("Date: ");
+        String date = sc.nextLine();
+
+        String sql = "INSERT INTO incidents (pet_id, description, date) VALUES (?, ?, ?)";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setInt(1, petId);
+        pst.setString(2, desc);
+        pst.setString(3, date);
+        pst.executeUpdate();
+
+        System.out.println("Incident Logged!");
+    }
+}
