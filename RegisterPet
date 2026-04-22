@@ -1,0 +1,21 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class RegisterPet {
+    public static void register(Connection conn, Scanner sc, int userId) throws SQLException {
+        System.out.print("Pet Name: ");
+        String pet = sc.nextLine();
+
+        System.out.print("Type: ");
+        String type = sc.nextLine();
+
+        String sql = "INSERT INTO pets (user_id, pet_name, type) VALUES (?, ?, ?)";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setInt(1, userId);
+        pst.setString(2, pet);
+        pst.setString(3, type);
+        pst.executeUpdate();
+
+        System.out.println("Pet Registered!");
+    }
+}
